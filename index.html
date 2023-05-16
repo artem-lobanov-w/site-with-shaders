@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Shaders</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="/css.css">
+    <link rel="preload" href="/fonts/Felidae.woff2" as="font">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="main-section">
+        <header><span class="h1-fornt">Шейдеры</span><span class="h1-back">Шейдеры</span></header>
+        <div class="header-banner" id="canvas-zero"></div>
+        <div class="line"></div>
+        <div class="first-block block-content">
+            <div id="canvas-first"></div>
+            <div class="text-block first-text">
+                <h2>Волна</h2>
+                <div class="text-button">
+                    <p>Первый шейдер представляет собой волну, которая распространяется по картинке в&#160;заданном радиусеот центра курсора. Эффект создается за&#160;счет колебаний координат каждого писеля по&#160;синусоиде и&#160;косинусоиде.</p>
+                    <button>Посмотреть шейдер на GitHub
+                        <svg width="40" height="22" viewBox="0 0 40 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M28.9063 0.5L39 11M39 11L28.9063 21.5M39 11H0" stroke="#7A7975"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="line"></div>
+        <div class="second-block block-content">
+            <div class="text-block second-text">
+                <h2>Пиксель</h2>
+                <div class="text-button">
+                    <p>Данный шейдер разбивает канвас на&#160;квадраты, размер которых регулируется расстоянием от&#160;курсора до&#160;центра канваса. Цвет пикселей внутри каждого квадрата берется общий из&#160;одной координаты изображения."</p>
+                    <button>Посмотреть шейдер на GitHub
+                        <svg width="40" height="22" viewBox="0 0 40 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M28.9063 0.5L39 11M39 11L28.9063 21.5M39 11H0" stroke="#7A7975"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div id="canvas-second"></div>
+        </div>
+    </div>
+    <div id="cursor"></div>
+    <div id="cursor-bg">
+        <img src="/img/cursor-blur.png" alt="">
+    </div>
+    <script id="fragShader0" type="shader-code">
+        uniform vec2 res0;
+        uniform sampler2D tex0;
+        uniform vec3 mouse0;
+        // * 0.5625
+
+        vec2 rotateCoord(vec2 pixel, float pi, vec2 mouse, float distFactor) {
+            vec2 uv = pixel - mouse;
+            vec2 mNew;
+            mNew.x = cos(pi)*mouse.x + sin(pi)*mouse.y;
+            mNew.y = -sin(pi)*mouse.x + cos(pi)*mouse.y;
+
+            //Сила закручивания
+            float powerRotate = 1.20;
+
+            //Поворачиваем координаты
+            vec2 uvNew;
+            distFactor = pow(distFactor,2.0)/(1.0/powerRotate);
+            uvNew.x = cos(pi*distFactor)*uv.x + sin(pi*distFactor)*uv.y;
+            uvNew.y = -sin(pi*distFactor)*uv.x + cos(pi*distFactor)*uv.y;
+            uvNew -= mNew;
+            return uvNew;
+        }
+
+
+        void main() {
+            float pi = 3.1415926535;
+            vec3 color;
+            vec2 pixel = gl_FragCoord.xy / res0.xy;
+            vec2 mouse = mouse0.xy / res0.xy;
+            float dist = distance(gl_FragCoord.xy,mouse0.xy);
+            float r = mouse0.z;
+            float distFactor = 1.0 - dist / r;
+            vec2 uvNew = rotateCoord( pixel, pi, mouse, distFactor);
+            
+            vec4 te;
+            if(dist<r) {
+                distFactor = pow(distFactor,2.0)* 2.264;
+                te.r = texture2D(tex0,uvNew+0.002*(1.0-distFactor)).r;
+                te.g = texture2D(tex0,uvNew).g;
+                te.b = texture2D(tex0,uvNew-0.002*(1.0-distFactor)).b;
+                color = te.rgb;
+            } else {
+                te = texture2D(tex0,pixel);
+                color = te.rgb + distFactor * 0.0016;
+            }
+            gl_FragColor = vec4(color,1.0);
+         }
+    </script>
+
+    <script id="fragShader" type="shader-code">
+        uniform vec2 res;
+        uniform sampler2D tex;
+        uniform vec3 mouse1;
+        uniform vec2 variable;
+
+        void main() {
+            vec3 pixel;
+            vec2 coord = gl_FragCoord.xy;
+            vec2 uv = coord / res.xy;
+            float dist = distance(gl_FragCoord.xy,mouse1.xy);
+            float lz = mouse1.z / 2.0;
+            dist /= res.x;
+            float r = mouse1.z / 2.0;
+            float PI = 3.1415926535;
+            float distFactor = 1.0 - dist / r;
+            float time = variable.x;
+            float timeSin = sin(cos(uv.x-time)*20.0) + 0.5;
+            float timeCos = cos(sin(uv.y-time)*20.0) + 0.5;
+            coord += timeSin * distFactor * 1.5 * 5.0;
+            coord += timeCos * distFactor * 1.5 * 5.0;
+            uv = coord / res.xy;
+            
+            if(dist<lz) {
+                pixel = vec3(texture2D(tex, uv).rgb);
+            } else {
+                uv = gl_FragCoord.xy / res.xy;
+                pixel = vec3(texture2D(tex, uv).rgb);
+            }
+            gl_FragColor = vec4(pixel,1.0);
+       }
+    </script>
+
+    <script id="fragShader2" type="shader">
+        uniform vec2 res2;
+        uniform sampler2D tex2;
+        uniform vec3 mouse;
+        uniform vec2 variable;
+        uniform float sizeGrid;
+
+        void main() {
+            float dimension = 1.0;
+            vec2 mouse = mouse.xy;
+            mouse = mouse - (res2.xy / 2.0);
+            float mou = length(mouse.xy);
+            mou *= 0.05 * 0.5;
+            vec2 uv = floor(gl_FragCoord.xy / mou) / (res2.xy / mou);
+            vec2 m = floor(mouse.xy / mou) / res2.y;
+            vec4 color = texture2D(tex2, uv);
+            if(m == uv) {
+                color *= 0.0;
+            }
+            
+            gl_FragColor = vec4(color.rgb,1.0);
+       }
+    </script>
+    <!-- vec2 points[3];
+    points[0] = vec2(0.5, 0.5);
+    points[1] = vec2(0.5, 0.3);
+    points[2] = vec2(0.5, 0.82);
+    float radPoint = 0.008; -->
+
+    <!-- LightVector = vec3(LightVector.x - 0.5, LightVector.y - 0.5, LightVector.z); -->
+    <!-- <script src="./js/three.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+    <script src="./js/js-WebGL.js"></script>
+    <script src="./js/js.js"></script>
+
+</body>
+
+</html>

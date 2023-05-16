@@ -1,0 +1,245 @@
+@font-face {
+    font-family: "Felidae";
+    src: url(/fonts/Felidae.woff2);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+body {
+    margin: 0px;
+    padding: 40px 32px 100px 32px;
+    min-height: 100vh;
+    max-width: 100%;
+    background-color: #eeede9;
+    font-family: 'Raleway', sans-serif;
+    position: relative;
+    cursor: none !important;
+}
+
+::-moz-selection {
+    color: #fff;
+    background: #A9A89F;
+  }
+  
+::selection {
+    color: #fff;
+    background: #A9A89F;
+}
+
+.main-section {
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 40px;
+    z-index: 1;
+}
+
+header {
+    width: 100%;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15vw;
+    font-weight: 400;
+    line-height: 74px;
+    letter-spacing: 0.135em;
+    text-align: center;
+    text-transform: uppercase;
+    border: 1px solid #AEAEAE;
+    border-radius: 50px;
+    overflow: hidden;
+    z-index: 1;
+    font-family: "Felidae";
+}
+
+.header-banner {
+    height: 660px;
+    width: 100%;
+    background-image:url(/img/ivan-rohovchenko-EJ54uZ9tA5M-unsplash.jpg);
+    background-position: center;
+    background-size: cover;
+    border-radius: 50px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.line {
+    height: 1px;
+    width: 100%;
+    background-color: #AEAEAE;
+}
+
+.h1-back {
+    z-index: 0;
+    position: absolute;
+    color: #797979;
+    transform: translate(3px,3px);
+}
+
+.h1-fornt {
+    z-index: 1;
+    position: absolute;
+    color: #EEEDE9;
+    -webkit-text-stroke: 1px #797979;
+}
+
+.block-content {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: start;
+    flex-direction: row;
+}
+
+.first-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 660px;
+    gap: 20px;
+}
+
+.text-block {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.first-text {
+    min-width: 762px;
+}
+
+.text-button {
+    max-width: 530px;
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+}
+
+p {
+    color: #7A7975;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28px;
+    text-align: left;
+
+}
+
+button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    vertical-align: middle;
+    gap: 40px;
+    border: 1px solid #7A7975;
+    border-radius: 100px;
+    padding: 40px 80px;
+    color: #7A7975;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 28px;
+    text-align: left;
+    width: max-content;
+    background-color: #11111100;
+    cursor: none !important;
+}
+
+h2 {
+    font-size: 60px;
+    text-transform: uppercase;
+    color: #A9A89F;
+    text-align: left;
+    margin: 0px;
+    font-size: 168px;
+    font-weight: 400;
+    line-height: 172px;
+    letter-spacing: 0em;
+    font-family: "Felidae";
+
+}
+
+#canvas-first {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    border-radius: 50px;
+}
+
+
+
+.second-block {
+    wwidth: 100%;
+    min-height: 660px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.second-text {
+    width: 100%;
+    height: 660px;
+    
+}
+
+#canvas-second {
+    height: 660px;
+    min-width: 762px;
+    max-width: 762px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    border-radius: 50px;
+}
+
+
+
+#cursor {
+    border-radius: 50%;
+    background-color: #5c594a;
+    position: fixed;
+    transition: transform 0.35s, background-color 0.35s;
+    pointer-events: none;
+    border: solid 1.0px #5c594a;
+    z-index: 2;
+}
+
+#cursor-bg {
+    width: 10px;
+    height: 10px;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+    pointer-events: none;
+}
+
+#cursor-bg img {
+    width: 500px;
+    height: 500px;
+    opacity: 50%;
+    pointer-events: none;
+}
+
+.cursorhover {
+    background-color: #00000000 !important;
+    border: solid 0.1px #11100c !important;
+}
+
+
+#test {
+    width: 200px;
+    height: 200px;
+    background-color: #1a2183;
+}
